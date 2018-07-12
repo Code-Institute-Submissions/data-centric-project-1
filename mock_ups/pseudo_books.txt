@@ -1,0 +1,212 @@
+import os
+import flask
+import pymongo
+import bson.objectid
+import itemgetter
+import random
+
+app = Flask(__name__)
+
+app.config[MONGODB_URI]
+app.config[MONGODB_NAME]
+
+mongo = PyMongo(app)
+
+
+    ### Homepage
+
+app route / methods POST
+define index 
+
+    # display homepage and content
+   
+    _books = mongo.db.books.find()
+    
+    # most viewed books to display
+    most_viewed_books = _books itemgetter by views in reverse top 5
+    
+    # random featured book
+    i = random int between 0 and length of _books
+    featured_book = _books[i]
+    
+    # list of genres to filter by
+    _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
+    genres = []
+    for key, value in _genres.items()
+        if key == "genre"
+            genres.append(value.capitalize())
+    
+    render template index.html, most_viewed_books, featured_book, genres
+    
+    
+    
+    ### Search
+    
+app route /search methods [POST]
+define search (search_for)
+    
+    # finds all results of a text search
+    mongo.db.books.createIndex( { "$**": "text" } )
+    results = mongo.db.books.find({ $text: { $search: search_for } })
+    
+    return redirect(url_for(search_results, results, search_for))
+    
+app route /search_results
+define search_results(results, search_for)
+    
+    # list of genres to filter by
+    _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
+    genres = []
+    for key, value in _genres.items()
+        if key == "genre"
+            genres.append(value.capitalize())
+    
+    # list of authors to filter by
+    _authors = mongo.db.books.find({}, { "author": 1, "_id": 0 })
+    authors = []
+    for key, value in _authors.items()
+        if key == "author"
+            authors.append(value.capitalize())
+    
+    render template search_results.html, results, genres, authors, search_for
+    
+app route /sort_by
+define sort_by (option, results, search_for)
+
+    # sort by selected option 
+    sorted_results = results itemgetter [option] in reverse order
+    
+    return redirect(url_for(search_results, results=sorted_results, search_for))
+    
+app route /filter_by
+define filter_by (filter, option, results, search_for)
+
+    # filter by selected option
+    filtered_resutls = mongo.db.books.find({ filter: { $eq: option }})
+    
+    return redirect(url_for(search_results, results=filtered_resutls, search_for))
+    
+    
+
+    ### Book CRUD operations
+
+app route /record
+define record (book_id)
+    
+    # find book by book_id
+    book_record = mongo.db.books.find_one({ "_id": ObjectId( book_id )})
+    
+    # get reviews
+    reviews = book_record["reviews"]
+    
+    # get rating
+    rating = book_record["rating"]
+    
+    # get related books
+    _genre = book_record["genre"]
+    related_books = mongo.db.books.find( {genre: $eq:_genre} ) limit 5
+    
+    # increase views
+    views = book_record["views"]
+    mongo.db.books.update({ "_id": ObjectId( book_id )},
+    {
+        $set: {
+            "views": views
+        }
+    })
+    
+    render template record.html, book_record, reviews, related_books
+    
+app route /update_review methods [POST]
+define update_review(book_id)
+
+    # update book record with review and rating
+    mongo.db.books.update_one({"_id": ObjectId(book_id)},
+    {
+        $push: {
+            "reviews.name": request.form.get["name"],
+            "reviews.review": request.form.get["review"],
+            "rating": request.form.get["rating"]
+        }
+    })
+    
+    return redirect(url_for("record", book_id))
+    
+app route /add_book
+define add_book
+    
+    # go to add book form
+    _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
+    genres = []
+    for key, value in _genres.items()
+        if key == "genre"
+            genres.append(value.capitalize())
+    
+    render template add_book.html, genres
+    
+app route /insert_book methods [POST]
+define insert_book 
+
+    # insert new book record
+    mongo.db.books.insert_one({
+        "title": request.form.get["title"],
+        "author": request.form.get["author"],
+        "genre": request.form.get["genre"],
+        "blurb": request.form.get["blurb"],
+        "publisher": request.form.get["publisher",
+        "cover_image": request.form.get["cover_image"],
+        "views": 0,
+        "reviews": [],
+        "ratings": []
+        })
+    
+app route /clear_form
+define clear_form
+    
+    # clear insert form
+    return redirect(url_for("add_book"))
+    
+app route /edit_book
+define edit_book (book_id)
+    
+    # edit book record
+    book_record = mongo.db.books.find({"_id": ObjectId(book_id)}
+    _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
+    genres = []
+    for key, value in _genres.items()
+        if key == "genre"
+            genres.append(value.capitalize())
+    
+    render template edit_book.html, book_record, genres
+    
+app route /update_book methods [POST]
+define update_book (book_id)
+
+    # updating a book record
+    mongo.db.books.update_one({"_id": ObjectId(book_id)},
+    {
+        $set: {
+            "title": request.form.get["title"],
+            "author": request.form.get["author"],
+            "genre": request.form.get["genre"],
+            "blurb": request.form.get["blurb"],
+            "publisher": request.form.get["publisher",
+            "cover_image": request.form.get["cover_image"]
+        }
+    })
+    
+    return redirect(url_for("record", book_id))
+
+app route /delete_book
+define delete_book (book_id)
+    
+    # delete book record
+    mongo.db.books.remove({"_id": ObjectId(book_id)})
+    
+    return redirect(url_for("index")
+    
+
+
+app.run(host=os.environ.get("IP"),
+        port=os.environ.get("PORT"),
+        debug=True)

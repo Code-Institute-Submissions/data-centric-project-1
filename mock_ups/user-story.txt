@@ -1,0 +1,86 @@
+    User Story
+
+DATABASE SCHEMA
+
+    - User
+        - ID
+        - Name
+        - Books
+        
+    - Book
+        - ID
+        - Title
+        - Genre ID
+        - Author ID
+        - Blurb
+        - Cover Image
+        - Publisher ID
+        - Views
+        - Rating
+        - Reviews
+        - Related Books
+        
+    - Author
+        - ID
+        - Name
+        - Books
+        
+    - Publisher
+        - ID
+        - Name
+        - Books
+        
+    - Genres
+        - ID
+        - Name
+        - Books
+        
+
+
+INDEX
+
+    As a User I would want:
+    
+        - to be able to easily navigate website
+        
+        - to be informed about the website
+        
+        - to be able to search 
+        
+        - to be drawn in by content
+
+INSERT FORM
+
+    As a User I would want:
+        
+        - to easily understand and read the form
+        
+        - to be clearly told where information goes
+        
+        - to be informed that the record was added successfully or why it wasn't successful
+
+SEARCH
+
+    As a User I would want:
+    
+        - to be clearly shown the search results
+        
+        - to be able to filter the results
+        
+        - to be able to sort the results
+        
+        - to be able to view results by page if many results returned
+        
+        - to be able to click on a result to view more about it
+        
+        - to be able to clear filters
+        
+RECORD DETAILS
+
+    As a User I would want:
+    
+        - to be able to clearly view a record details
+        
+        - to be able to edit or delete a record
+        
+        - to be able to add to a user reading list
