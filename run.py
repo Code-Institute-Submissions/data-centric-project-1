@@ -16,9 +16,9 @@ mongo = PyMongo(app)
 def index():
     
     return "Hello World"
-
-def insert_book():
     
+def insert_book():
+
     # Insert new book record
     
     mongo.db.books.insert_one({
