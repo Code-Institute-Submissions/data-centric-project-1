@@ -32,9 +32,9 @@ define index
     # list of genres to filter by
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
     genres = []
-    for key, value in _genres.items()
-        if key == "genre"
-            genres.append(value.capitalize())
+    for genre in _genres
+        if genre[key] == "genre"
+            genres.append(genre[key])
     
     render template index.html, most_viewed_books, featured_book, genres
     
@@ -57,16 +57,16 @@ define search_results(results, search_for)
     # list of genres to filter by
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
     genres = []
-    for key, value in _genres.items()
-        if key == "genre"
-            genres.append(value.capitalize())
+    for genre in _genres
+        if genre[key] == "genre"
+            genres.append(genre[key])
     
     # list of authors to filter by
     _authors = mongo.db.books.find({}, { "author": 1, "_id": 0 })
     authors = []
-    for key, value in _authors.items()
-        if key == "author"
-            authors.append(value.capitalize())
+    for author in _authors
+        if author[key] == "author"
+            authors.append(author[key])
     
     render template search_results.html, results, genres, authors, search_for
     
@@ -107,11 +107,13 @@ define record (book_id)
     related_books = mongo.db.books.find( {genre: $eq:_genre} ) limit 5
     
     # increase views
-    views = book_record["views"]
+    _views = book_record["views"]
+    new_views = _views + 1
+    
     mongo.db.books.update({ "_id": ObjectId( book_id )},
     {
         $set: {
-            "views": views
+            "views": new_views
         }
     })
     
@@ -121,7 +123,7 @@ app route /update_review methods [POST]
 define update_review(book_id)
 
     # update book record with review and rating
-    mongo.db.books.update_one({"_id": ObjectId(book_id)},
+    mongo.db.books.update({"_id": ObjectId(book_id)},
     {
         $push: {
             "reviews.name": request.form.get["name"],
@@ -136,11 +138,12 @@ app route /add_book
 define add_book
     
     # go to add book form
+    # list of genres
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
     genres = []
-    for key, value in _genres.items()
-        if key == "genre"
-            genres.append(value.capitalize())
+    for genre in _genres
+        if genre[key] == "genre"
+            genres.append(genre[key])
     
     render template add_book.html, genres
     
@@ -171,11 +174,12 @@ define edit_book (book_id)
     
     # edit book record
     book_record = mongo.db.books.find({"_id": ObjectId(book_id)}
+    # list of genres
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
     genres = []
-    for key, value in _genres.items()
-        if key == "genre"
-            genres.append(value.capitalize())
+    for genre in _genres
+        if genre[key] == "genre"
+            genres.append(genre[key])
     
     render template edit_book.html, book_record, genres
     
