@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header>
+    <h3>Book Record</h3>
+</header>
+
+<section class="row">
+    <article class="col-sm-12 col-lg-5">
+        <div class="row">
+            <button class="btn"><a href="{{ url_for('edit_book') }}">Edit</a></button>
+            <button class="btn"><a href="{{ url_for('delete_book') }}">Delete</a></button>
+        </div>
+        <div>
+            <img class="w-25 h-25" src="" alt="No Image Available"></img>
+        </div>
+        <h5>{{ book.publisher }}</h5>
+        <div id="rating"></div>
+    </article>
+    <article class="col-sm-12 col-lg-7">
+        <h5>{{ book.title }}</h5>
+        <h5>{{ book.author }}</h5>
+        <h5>{{ book.genre }}</h5>
+        <p>{{ book.author }}</p>
+    </article>
+</section>
+
+{% endblock %}
