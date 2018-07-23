@@ -1,13 +1,15 @@
 import os
+import re
 from flask import Flask, render_template, redirect, request, url_for
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from mongodb import mongo_uri, mongodb_name
+from random import randint
+
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = mongo_uri()
-app.config["MONGODB_NAME"] = mongodb_name()
+app.config["MONGO_URI"] = "mongodb://admin:r00t_mdbtj@ds039261.mlab.com:39261/project-books-tj"
+app.config["MONGODB_NAME"] = "project-books-tj"
 
 mongo = PyMongo(app)
 
@@ -15,7 +17,61 @@ mongo = PyMongo(app)
 @app.route("/")
 def index():
     
-    return "Hello World"
+    # display homepage and content
+    _books = mongo.db.books.find()
+    books = [book for book in _books]
+    
+    # most viewed books to display
+    most_viewed_books = mongo.db.books.find(
+        { "$query": {},
+            "$orderby": { "views" : -1 }}).limit(5)
+            
+    most_viewed = [book for book in most_viewed_books]
+    
+    # random featured book
+    i = randint(0, (len(books) - 1)) 
+    featured_book = books[i]
+    featured = {
+        "title": featured_book["title"],
+        "author": ",".join(featured_book["author"]),
+        "blurb": featured_book["blurb"],
+        "ISBN": re.sub(r'[^\w.]', '', featured_book["ISBN"]) 
+    }
+    
+    # list of genres to filter by
+    _genres = get_genres()
+    
+    return render_template("index.html",
+                            featured=featured,
+                            most_viewed=most_viewed,
+                            genres=_genres)
+
+
+@app.route("/add_book")
+def add_book():
+    
+    # go to add book form
+    return render_template("add_book.html") 
+    
+@app.route("/insert_book", methods = ["POST"])
+def insert_book():
+
+    # Insert new book record
+    
+    mongo.db.books.insert_one({
+            "title": request.form["title"],
+            "author": [request.form["author"]],
+            "genre": [request.form["genre"]],
+            "blurb": request.form["blurb"],
+            "publisher": [request.form["publisher"]],
+            "ISBN": request.form["ISBN"],
+            "views": 0,
+            "reviews": [],
+            "ratings": []
+        })
+    
+    return redirect(url_for("add_book"))
+
     
 def find_all_books():
     
@@ -34,31 +90,31 @@ def search(search_for):
 def get_genres():
     
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
-    genre_list = [genre for genre in _genres]
+    genre_list = [",".join(genre["genre"]) for genre in _genres]
     
     genres = []
     for genre in genre_list:
-        if genre["genre"] not in genres:
-            genres.append(genre["genre"])
+        if genre not in genres:
+            genres.append(genre)
     
     return genres
     
 def get_authors():
     
     _authors = mongo.db.books.find({}, { "author": 1, "_id": 0 })
-    author_list = [author for author in _authors]
+    author_list = [",".join(author["author"]) for author in _authors]
     
     authors = []
     for author in author_list:
-        if author["author"] not in authors:
-            authors.append(author["author"])
+        if author not in authors:
+            authors.append(author)
     
     return authors
 
     
-def insert_book():
+def insert_test_book():
 
-    # Insert new book record
+    # Insert test book record
     
     mongo.db.books.insert_one({
             "title": "Test Book 2",
@@ -66,7 +122,7 @@ def insert_book():
             "genre": ["Test 1"],
             "blurb": "This is a test book",
             "publisher": ["No one"],
-            "cover_image": "None",
+            "ISBN": "None",
             "views": 0,
             "reviews": [],
             "ratings": []
@@ -94,7 +150,7 @@ def update_book(book_id):
             {
                 "title": "Test Book 1",
                 "blurb": "This is a test book, updated",
-                "cover_image": "None"
+                "ISBN": "None"
             }
         })
     mongo.db.books.update(
