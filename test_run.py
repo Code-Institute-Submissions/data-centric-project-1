@@ -20,7 +20,7 @@ class test_books(unittest.TestCase):
             "genre": ["Test"],
             "blurb": "This is a test book",
             "publisher": ["Me"],
-            "cover_image": "None",
+            "ISBN": "None",
             "views": 0,
             "reviews": [],
             "ratings": []
@@ -42,7 +42,7 @@ class test_books(unittest.TestCase):
             "genre": ["Test"],
             "blurb": "This is a test book, updated",
             "publisher": ["Me"],
-            "cover_image": "None",
+            "ISBN": "None",
             "views": 0,
             "reviews": [],
             "ratings": []
@@ -68,48 +68,48 @@ class test_books(unittest.TestCase):
         
         self.assertIn(test_author, _authors)
         
-    # def test_insert_book(self):
+    def test_insert_book(self):
         
-    #     # Test that the book inserted correctly
+        # Test that the book inserted correctly
         
-    #     run.insert_book()
+        run.insert_test_book()
         
-    #     last_book = run.find_last_inserted()
+        last_book = run.find_last_inserted()
         
-    #     test_book = {
-    #         "title": "Test Book 2",
-    #         "author": ["Me"],
-    #         "genre": ["Test 1"],
-    #         "blurb": "This is a test book",
-    #         "publisher": ["No one"],
-    #         "cover_image": "None",
-    #         "views": 0,
-    #         "reviews": [],
-    #         "ratings": []
-    #     }
+        test_book = {
+            "title": "Test Book 2",
+            "author": ["Me"],
+            "genre": ["Test 1"],
+            "blurb": "This is a test book",
+            "publisher": ["No one"],
+            "ISBN": "None",
+            "views": 0,
+            "reviews": [],
+            "ratings": []
+        }
         
-    #     self.assertEqual(test_book, last_book)
+        self.assertEqual(test_book, last_book)
         
-    # def test_update_reviews(self):
+    def test_update_reviews(self):
         
-    #     # Test for updating reviews and rating by ID
+        # Test for updating reviews and rating by ID
         
-    #     run.update_reviews("5b4e59be207f2b50a192f8e4")
-    #     book = run.find_book("5b4e59be207f2b50a192f8e4")
+        run.update_reviews("5b4e59be207f2b50a192f8e4")
+        book = run.find_book("5b4e59be207f2b50a192f8e4")
         
-    #     book_reivew = book["reviews"]
+        book_reivew = book["reviews"]
         
-    #     test_review = {
-    #             "name": "Me",
-    #             "review": "This is a test"
-    #             }
+        test_review = {
+                "name": "Me",
+                "review": "This is a test"
+                }
             
         
-    #     self.assertIn(test_review, book_reivew)
+        self.assertIn(test_review, book_reivew)
         
     def search(self):
         
-        results = run.search("Test")
+        results = run.search("Hodder")
         
         for result in results:
             print(result)
