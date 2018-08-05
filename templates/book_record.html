@@ -8,21 +8,58 @@
 <section class="row">
     <article class="col-sm-12 col-lg-5">
         <div class="row">
-            <button class="btn"><a href="{{ url_for('edit_book') }}">Edit</a></button>
-            <button class="btn"><a href="{{ url_for('delete_book') }}">Delete</a></button>
+            <button class="btn"><a href="{{ url_for('edit_book', book_id=book._id) }}">Edit</a></button>
+            <button class="btn"><a href="{{ url_for('delete_book', book_id=book._id) }}">Delete</a></button>
         </div>
         <div>
             <img class="w-25 h-25" src="" alt="No Image Available"></img>
         </div>
-        <h5>{{ book.publisher }}</h5>
+        <h5>{{ book.publisher|join(",") }}</h5>
+        <h6>Rating: {{ rating }}/5</h6>
         <div id="rating"></div>
     </article>
     <article class="col-sm-12 col-lg-7">
         <h5>{{ book.title }}</h5>
-        <h5>{{ book.author }}</h5>
-        <h5>{{ book.genre }}</h5>
-        <p>{{ book.author }}</p>
+        <h5>{{ book.author|join(",") }}</h5>
+        <h5>{{ book.genre|join(",") }}</h5>
+        <p>{{ book.blurb }}</p>
     </article>
+</section>
+
+<form action="{{ url_for('update_reviews', book_id=book._id) }}" method="POST">
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="review.name">Name</label>
+            <input id="review.name" name="review.name" class="form-control" type="text" required>
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="review.review">Review</label>
+            <textarea id="review.review" name="review.review" class="form-control" type="text" rows="2" required></textarea></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="rating">Rating</label>
+            <span><input name="rating" id="1_star" type="radio" value="1"><label for="rating">1</label></span>
+            <span><input name="rating" id="2_star" type="radio" value="2"><label for="rating">2</label></span>
+            <span><input name="rating" id="3_star" type="radio" value="3"><label for="rating">3</label></span>
+            <span><input name="rating" id="4_star" type="radio" value="4"><label for="rating">4</label></span>
+            <span><input name="rating" id="5_star" type="radio" value="5"><label for="rating">5</label></span>
+        </div>
+        <div class="form-group col-sm-6">
+             <button type="submit" class="btn">Add Review</button>
+        </div>
+    </div>
+</form>
+
+
+<section class="row">
+    {% for review in reviews %}
+    <div>
+        <h6>{{ review.name }}</h6>
+        <p>{{ review.review }}</p>
+    </div>
+    {% endfor %}
 </section>
 
 {% endblock %}

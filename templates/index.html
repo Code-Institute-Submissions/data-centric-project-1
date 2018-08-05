@@ -26,13 +26,13 @@
 </header>
 
 <section class="row">
-    <article class="col-sm-12 col-lg-5">
+    <article class="col-sm-12 col-lg-7">
         <h5>Featured Book</h5>
         <h6>{{ featured.title }}</h6>
-        <h6> By {{ featured.author }}</h6>
+        <h6> By {{ featured.author|join(",") }}</h6>
         <p>{{ featured.blurb }}</p>
     </article>
-    <article class="col-sm-12 col-lg-7">
+    <article class="col-sm-12 col-lg-5">
         <h5>About</h5>
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
         sed diam nonummy nibh euismod tincidunt ut laoreet dolore
@@ -46,14 +46,16 @@
     </article>
 </section>
 <section class="row">
+    <article class="col-sm-12 col-lg-4">
+        {% for genre in genres %}
+        <button class="btn">
+            <a href="{{ url_for('filter_by_genre', filter_by=genre) }}">{{ genre }}</a>
+        </button>
+        {% endfor %}
+    </article>
     <article class="col-sm-12 col-lg-8">
         {% for book in most_viewed %}
         <h6>{{ book.title }} - Views: {{ book.views }}</h6>
-        {% endfor %}
-    </article>
-    <article class="col-sm-12 col-lg-4">
-        {% for genre in genres %}
-        <button class="btn">{{ genre }}</button>
         {% endfor %}
     </article>
 </section>
