@@ -11,10 +11,10 @@ class test_books(unittest.TestCase):
         
         # Find book record by ID
         
-        book = run.find_book("5b476e68207f2b2e30f64a0c")
+        book = run.find_test_book("5b55febe207f2b4319b8c010")
         
         test_book = {
-            "_id": ObjectId("5b476e68207f2b2e30f64a0c"),
+            "_id": ObjectId("5b55febe207f2b4319b8c010"),
             "title": "Test Book",
             "author": ["No one"],
             "genre": ["Test"],
@@ -32,21 +32,22 @@ class test_books(unittest.TestCase):
         
         # Update book record by ID
         
-        run.update_book("5b4773af207f2b49fa5faa0e")
-        book = run.find_book("5b4773af207f2b49fa5faa0e")
+        run.update_test_book("5b56efbe207f2b5a522cd07d")
+        book = run.find_test_book("5b56efbe207f2b5a522cd07d")
         
         test_book = {
-            "_id": ObjectId("5b4773af207f2b49fa5faa0e"),
+            "_id": ObjectId("5b56efbe207f2b5a522cd07d"),
             "title": "Test Book 1",
-            "author": ["No one"],
-            "genre": ["Test"],
+            "author": ["Me", "No one"],
+            "genre": ["Test 1"],
             "blurb": "This is a test book, updated",
-            "publisher": ["Me"],
+            "publisher": ["No one", "Me"],
             "ISBN": "None",
             "views": 0,
             "reviews": [],
             "ratings": []
         }
+        
         
         self.assertEqual(test_book, book)
         
@@ -55,7 +56,7 @@ class test_books(unittest.TestCase):
         # Test get genre list
         
         _genres = run.get_genres()
-        test_genre = ["Test"]
+        test_genre = "History"
         
         self.assertIn(test_genre, _genres)
         
@@ -64,7 +65,7 @@ class test_books(unittest.TestCase):
         # Test get author list 
         
         _authors = run.get_authors()
-        test_author = ["No one"]
+        test_author = "Robyn Young"
         
         self.assertIn(test_author, _authors)
         
@@ -74,7 +75,7 @@ class test_books(unittest.TestCase):
         
         run.insert_test_book()
         
-        last_book = run.find_last_inserted()
+        last_book = run.find_last_test()
         
         test_book = {
             "title": "Test Book 2",
@@ -94,8 +95,8 @@ class test_books(unittest.TestCase):
         
         # Test for updating reviews and rating by ID
         
-        run.update_reviews("5b4e59be207f2b50a192f8e4")
-        book = run.find_book("5b4e59be207f2b50a192f8e4")
+        run.update_test_reviews("5b55ff10207f2b4522d99830")
+        book = run.find_test_book("5b55ff10207f2b4522d99830")
         
         book_reivew = book["reviews"]
         
@@ -103,16 +104,8 @@ class test_books(unittest.TestCase):
                 "name": "Me",
                 "review": "This is a test"
                 }
-            
         
         self.assertIn(test_review, book_reivew)
-        
-    def search(self):
-        
-        results = run.search("Hodder")
-        
-        for result in results:
-            print(result)
     
 if __name__ == '__main__':
     unittest.main()
