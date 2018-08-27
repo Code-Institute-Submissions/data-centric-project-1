@@ -3,36 +3,62 @@
 
 <header class="row">
     <h3>Welcome!</h3>
-    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-    sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-    magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-    quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-    ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
-    dolor in hendrerit in vulputate velit esse molestie consequat,
-    vel illum dolore eu feugiat nulla facilisis at vero eros et
-    accumsan et iusto odio dignissim qui blandit praesent luptatum
-    zzril delenit augue duis dolore te feugait nulla facilisi.
-    Nam liber tempor cum soluta nobis eleifend option congue
-    nihil imperdiet doming id quod mazim placerat facer possim
-    assum. Typi non habent claritatem insitam; est usus legentis
-    in iis qui facit eorum claritatem. Investigationes
-    demonstraverunt lectores legere me lius quod ii legunt saepius.
-    Claritas est etiam processus dynamicus, qui sequitur mutationem
-    consuetudium lectorum. Mirum est notare quam littera gothica,
-    quam nunc putamus parum claram, anteposuerit litterarum formas
-    humanitatis per seacula quarta decima et quinta decima. Eodem
-    modo typi, qui nunc nobis videntur parum clari, fiant sollemnes
-    in futurum.</p>
+    <p>
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+        quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+        ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
+        dolor in hendrerit in vulputate velit esse molestie consequat,
+        vel illum dolore eu feugiat nulla facilisis at vero eros et
+        accumsan et iusto odio dignissim qui blandit praesent luptatum
+        zzril delenit augue duis dolore te feugait nulla facilisi.
+    </p>
 </header>
 
-<section class="row">
-    <article class="col-sm-12 col-lg-7">
-        <h5>Featured Book</h5>
-        <h6>{{ featured.title }}</h6>
-        <h6> By {{ featured.author|join(",") }}</h6>
-        <p>{{ featured.blurb }}</p>
+<section class="row content">
+    <div class="col-lg-6 offset-lg-3 col-sm-12">
+        <form class="search-form" action="{{ url_for('search_result') }}">
+            <div class="form-group">
+                <input class="form-control" id="search_term" name="search_term" type="search" placeholder="Search">
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn search-btn" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3 col-sm-12">
+        <h6>Quick Searchs</h6>
+        <div class="row justify-content-center">
+            {% for genre in genres %}
+            <a href="{{ url_for('filter_by_genre', search_term=genre, filter_by=genre) }}">
+                <button class="btn quick-search">{{ genre }}</button>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+
+<section class="row content">
+    <article class="col-sm-12 col-lg-8">
+        <div class="row">
+            <div class="col-5">
+                <img class="img-fluid" src="{{ url_for('static', filename='images/book_cover_coming.jpg') }}" alt="No Image Available"></img>
+            </div>
+            <div class="col-7">
+                <h5>Featured Book</h5>
+                <h6>{{ featured.title }}</h6>
+                <h6> By {{ featured.author }}</h6>
+                <p>{{ featured.blurb }}</p>
+                <a href="{{ url_for('book_record', book_id=featured._id) }}">
+                    <button class="btn" >View Book</button>
+                </a>
+            </div>
+        </div>
     </article>
-    <article class="col-sm-12 col-lg-5">
+    <article class="col-sm-12 col-lg-4">
         <h5>About</h5>
         <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
         sed diam nonummy nibh euismod tincidunt ut laoreet dolore
@@ -45,19 +71,61 @@
         zzril delenit augue duis dolore te feugait nulla facilisi.</p>
     </article>
 </section>
-<section class="row">
-    <article class="col-sm-12 col-lg-4">
-        {% for genre in genres %}
-        <button class="btn">
-            <a href="{{ url_for('filter_by_genre', filter_by=genre) }}">{{ genre }}</a>
-        </button>
-        {% endfor %}
+
+<section class="row content">
+    <article class="col-sm-12 col-lg-5">
+        <h6>Most Viewed By Genre</h6>
+        <div id="pie_chart"></div>
     </article>
-    <article class="col-sm-12 col-lg-8">
-        {% for book in most_viewed %}
-        <h6>{{ book.title }} - Views: {{ book.views }}</h6>
-        {% endfor %}
+    <article class="col-sm-12 col-lg-7">
+        <h6>Most Viewed By Title</h6>
+        <div id="row_chart"></div>
     </article>
 </section>
+    
+    
 
+<script>
+
+    var pie_chart = dc.pieChart("#pie_chart")
+    var row_chart = dc.rowChart("#row_chart");
+    
+    
+    var most_viewed = {{ most_viewed|tojson|safe }};
+    
+    var ndx = crossfilter(most_viewed),
+        title = ndx.dimension(function(d) {return d.title;}),
+        viewsGroup = title.group().reduceSum(function(d) {return +d.views;}),
+        genre = ndx.dimension(function(d) {return d.genre;}),
+        genreByCount = genre.group()
+        
+        
+    pie_chart
+        .width(360)
+        .height(360)
+        .radius(160)
+        .dimension(genre)
+        .group(genreByCount)
+        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+   
+    row_chart
+        .width(560)
+        .height(320)
+        .margins({top: 5, right: 5, bottom: 5, left: 5})
+        .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
+        .x(d3.scaleLinear().domain([6,20]))
+        .xAxis(d3.axisTop())
+        .elasticX(true)
+        .dimension(title)
+        .group(viewsGroup);
+        
+        
+    row_chart.on('pretransition', function() {
+        row_chart.select('g.axis').attr('transform', 'translate(0,0)');
+        row_chart.selectAll('line.grid-line').attr('y2', row_chart.effectiveHeight());
+    });
+    
+    dc.renderAll();
+    
+</script>
 {% endblock %}

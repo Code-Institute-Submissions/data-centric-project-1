@@ -5,61 +5,86 @@
     <h3>Book Record</h3>
 </header>
 
-<section class="row">
+<section class="row content">
     <article class="col-sm-12 col-lg-5">
         <div class="row">
-            <button class="btn"><a href="{{ url_for('edit_book', book_id=book._id) }}">Edit</a></button>
-            <button class="btn"><a href="{{ url_for('delete_book', book_id=book._id) }}">Delete</a></button>
+            <a href="{{ url_for('edit_book', book_id=book._id) }}"><button class="btn">Edit</button></a>
+            <a href="{{ url_for('delete_book', book_id=book._id) }}"><button class="btn">Delete</button></a>
         </div>
         <div>
-            <img class="w-25 h-25" src="" alt="No Image Available"></img>
+            <img class="img-fluid" src="{{ url_for('static', filename='images/book_cover_coming.jpg') }}" alt="No Image Available"></img>
         </div>
-        <h5>{{ book.publisher|join(",") }}</h5>
+        <h5>{{ book.publisher }}</h5>
         <h6>Rating: {{ rating }}/5</h6>
-        <div id="rating"></div>
+        <div id="bar_chart"></div>
     </article>
     <article class="col-sm-12 col-lg-7">
         <h5>{{ book.title }}</h5>
-        <h5>{{ book.author|join(",") }}</h5>
-        <h5>{{ book.genre|join(",") }}</h5>
+        <h5>{{ book.author }}</h5>
+        <h5>{{ book.genre }}</h5>
         <p>{{ book.blurb }}</p>
     </article>
 </section>
 
-<form action="{{ url_for('update_reviews', book_id=book._id) }}" method="POST">
-    <div class="row">
-        <div class="form-group col-sm-6">
-            <label for="review.name">Name</label>
-            <input id="review.name" name="review.name" class="form-control" type="text" required>
+<section class="content">
+    <form action="{{ url_for('update_reviews', book_id=book._id) }}" method="POST">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="review.name">Name</label>
+                <input id="review.name" name="review.name" class="form-control" type="text" required>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="review.review">Review</label>
+                <textarea id="review.review" name="review.review" class="form-control" type="text" rows="2" required></textarea></textarea>
+            </div>
         </div>
-        <div class="form-group col-sm-6">
-            <label for="review.review">Review</label>
-            <textarea id="review.review" name="review.review" class="form-control" type="text" rows="2" required></textarea></textarea>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="rating">Rating</label>
+                <span><input name="rating" id="1_star" type="radio" value="1" required><label for="rating">1</label></span>
+                <span><input name="rating" id="2_star" type="radio" value="2" required><label for="rating">2</label></span>
+                <span><input name="rating" id="3_star" type="radio" value="3" required><label for="rating">3</label></span>
+                <span><input name="rating" id="4_star" type="radio" value="4" required><label for="rating">4</label></span>
+                <span><input name="rating" id="5_star" type="radio" value="5" required><label for="rating">5</label></span>
+            </div>
+            <div class="form-group col-sm-6">
+                 <button type="submit" class="btn">Add Review</button>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="form-group col-sm-6">
-            <label for="rating">Rating</label>
-            <span><input name="rating" id="1_star" type="radio" value="1"><label for="rating">1</label></span>
-            <span><input name="rating" id="2_star" type="radio" value="2"><label for="rating">2</label></span>
-            <span><input name="rating" id="3_star" type="radio" value="3"><label for="rating">3</label></span>
-            <span><input name="rating" id="4_star" type="radio" value="4"><label for="rating">4</label></span>
-            <span><input name="rating" id="5_star" type="radio" value="5"><label for="rating">5</label></span>
-        </div>
-        <div class="form-group col-sm-6">
-             <button type="submit" class="btn">Add Review</button>
-        </div>
-    </div>
-</form>
+    </form>
+</section>
 
-
-<section class="row">
+<section class="row content">
     {% for review in reviews %}
     <div>
         <h6>{{ review.name }}</h6>
+        <h6>Rating: {{ review.rating }}/5</h6>
         <p>{{ review.review }}</p>
     </div>
     {% endfor %}
 </section>
+
+<script>
+
+    var bar_chart = dc.barChart("#bar_chart")
+    
+    var most_viewed = {{ ratings }};
+        
+    var ndx = crossfilter(most_viewed),
+        numbers = ndx.dimension(function(d) {return {"number1": 1, "number2": 2, "number3": 3, "number4": 4, "number5": 5};}),
+        groupNumberByCount = numbers.group();
+    
+    bar_chart
+        .width(320)
+        .height(240)
+        .x(d3.scaleLinear().domain([1,5]))
+        .brushOn(false)
+        .dimension(numbers)
+        .group(groupNumberByCount)
+        
+    bar_chart    
+        .render();
+        
+</script>
 
 {% endblock %}

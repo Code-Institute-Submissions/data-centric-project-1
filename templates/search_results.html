@@ -14,62 +14,92 @@
         <ul>
             {% if request.endpoint == "filtered_filter_by" %}
                 <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='ratings') }}">Rating</a>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='reviews') }}">No. of Reviews</a>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                </li>
+            {% elif request.endpoint == "filtered_filter_sort_by" %}
+                <li>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
                 </li>
             {% elif request.endpoint == "filter_by_author" %}
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_author', filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_author', filter_by=filter_by, sort_by='ratings') }}">Rating</a>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_author', filter_by=filter_by, sort_by='reviews') }}">No. of Reviews</a>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                </li>
+            {% elif request.endpoint == "filtered_sort_by_author" %}
+                <li>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
                 </li>
             {% elif request.endpoint == "filter_by_genre" %}
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', filter_by=filter_by, sort_by='ratings') }}">Rating</a>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', filter_by=filter_by, sort_by='reviews') }}">No. of Reviews</a>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
                 </li>
-            {% elif request.endpoint == "search_result" %}
+            {% elif request.endpoint == "filtered_sort_by_genre" %}
                 <li>
-                    <a href="{{ url_for('sorted_by', sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('sorted_by', sort_by='ratings') }}">Rating</a>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('sorted_by', sort_by='reviews') }}">No. of Reviews</a>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                </li>
+            {% elif request.endpoint == "sorted_by" %}
+                <li>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
                 </li>
             {% else %}
                 <li>
-                    <a href="{{ url_for('sorted_by', sort_by='views') }}">Views</a>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('sorted_by', sort_by='ratings') }}">Rating</a>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('sorted_by', sort_by='reviews') }}">No. of Reviews</a>
+                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
                 </li>
             {% endif %}
         </ul>
             
         
         <div>
-            <button class="btn">
-                <a href="{{ url_for('search_result') }}">Clear Filters</a>
-            </button>
+            <a href="{{ url_for('search_result', search_term=search_term) }}">
+                <button class="btn">Clear Filters</button>
+            </a>
         </div>
         <div>
             <h6>Genres</h6>
@@ -77,13 +107,13 @@
                 {% for genre in genres %}
                 <li>
                     {% if request.endpoint == "filtered_sort_by_author" %}
-                        <a href="{{ url_for('filtered_filter_sort_by', filter_by_1=genre, filter_by_2=filter_by, sort_by=sort_by) }}">{{ genre }}</a>
+                        <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by, sort_by=sort_by) }}">{{ genre }}</a>
                     {% elif request.endpoint == "filter_by_author" %}
-                        <a href="{{ url_for('filtered_filter_by', filter_by_1=genre, filter_by_2=filter_by) }}">{{ genre }}</a>
-                    {% elif request.endpoint == "search_result" %}
-                        <a href="{{ url_for('filter_by_genre', filter_by=genre) }}">{{ genre }}</a>
+                        <a href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by) }}">{{ genre }}</a>
+                    {% elif request.endpoint == "sorted_by" %}
+                        <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=genre, sort_by=sort_by) }}">{{ genre }}</a>
                     {% else %}
-                        <a href="{{ url_for('filter_by_genre', filter_by=genre) }}">{{ genre }}</a>
+                        <a href="{{ url_for('filter_by_genre', search_term=search_term, filter_by=genre) }}">{{ genre }}</a>
                     {% endif %}
                 </li>
                 {% endfor %}
@@ -95,13 +125,13 @@
                 {% for author in authors %}
                 <li>
                     {% if request.endpoint == "filtered_sort_by_genre" %}
-                        <a href="{{ url_for('filtered_filter_sort_by', filter_by_1=filter_by, filter_by_2=author, sort_by=sort_by) }}">{{ author }}</a>
+                        <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author, sort_by=sort_by) }}">{{ author }}</a>
                     {% elif request.endpoint == "filter_by_genre" %}
-                        <a href="{{ url_for('filtered_filter_by', filter_by_1=filter_by, filter_by_2=author) }}">{{ author }}</a>
-                    {% elif request.endpoint == "search_result" %}
-                        <a href="{{ url_for('filter_by_author', filter_by=author) }}">{{ author }}</a>
+                        <a href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author) }}">{{ author }}</a>
+                    {% elif request.endpoint == "sorted_by" %}
+                        <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=author, sort_by=sort_by) }}">{{ author }}</a>
                     {% else %}
-                        <a href="{{ url_for('filter_by_author', filter_by=author) }}">{{ author }}</a>
+                        <a href="{{ url_for('filter_by_author', search_term=search_term, filter_by=author) }}">{{ author }}</a>
                     {% endif %}
                 </li>
                 {% endfor %}
@@ -112,13 +142,24 @@
         <article class="d-flex flex-row flex-wrap">
         {% for result in results %}
         <div class="result">
-            <h6>{{ result.title }}</h6>
-            <p>By {{ result.author|join(",") }}</p>
-            <button class="btn" >
-                <a href="{{ url_for('book_record', book_id=result._id) }}">View Book</a>
-            </button>
+            <h6>{{ loop.index }}. {{ result.title }}</h6>
+            <p>By {{ result.author }}</p>
+            <a href="{{ url_for('book_record', book_id=result._id) }}">
+                <button class="btn" >View Book</button>
+            </a>
+            
         </div>
         {% endfor %}
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                <h5>{{ message }}</h5>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
         </article>
     </section>
 </section>
