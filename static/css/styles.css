@@ -1,36 +1,194 @@
 html {
-  height: 100%;
+    height: 100%;
 }
 
 body {
-  position: relative;
-  margin: 0;
-  padding-bottom: 6rem;
-  min-height: 100%;
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+    min-height: 100%;
+    background-color: #E2E2E8;
+    color: #2F3131;
 }
 
-header, .search-form {
-    padding-top: 32px;
+a:hover {
+    color: #909090;
+    text-decoration: none;
 }
 
-.content {
-    padding: 10px 25px;
-    margin: 10px 10px;
+.main-nav, .nav-link {
+    background-color: #2F3131;
+    color: #F8F7E5;
 }
 
-.search-btn {
-    padding: 5px 40px;
+.navbar-dark .navbar-nav .nav-link {
+    color: #F8F7E5;
+}
+
+.footer-text {
+    color: #F8F7E5;
+    margin: 0;
+    padding: 0.5rem 1rem;
+}
+
+.btn {
+    background-color: #2F3131;
+    color:  #F8F7E5;
+    font-weight: 600;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem #2F3131;
+}
+
+.btn:hover {
+    background-color: #F8F7E5;
+    color: #2F3131;
+}
+
+button:focus {
+    outline: 5px auto #F8F7E5;
+}
+
+header, .featured-book-sm, .featured-book-lg {
+    border: 5px solid #426E87;
+    border-radius: 10px;
+    background-color: #426E87;
+    color: #F8F7E5;
+}
+
+.featured-book-sm {
+    display: block;
+    padding: 1rem 0.5rem;
+}
+
+.featured-book-lg {
+    display: none;
+}
+
+.content, header {
+    padding: 0.5rem 1.5rem;
+    margin: 0.5rem 0.5rem;
+}
+
+.featured-header, .featured-body {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+    color:  #F8F7E5;
+}
+
+.featured-title {
+    padding: 2rem 0 0.5rem 0;
+}
+
+.about-body {
+    padding: 1rem 1rem;
+}
+
+.about-header {
+    margin-bottom: 1rem;
+}
+
+.side-bar-left {
+    display: none;
+}
+
+#filter-expand {
+    padding: .375rem 1.5rem;
+    margin-top: 1rem;
+}
+
+.search-form {
+    padding-top: 2rem;
+}
+
+.search-btn, .featured-btn {
+    padding: 0.375rem 2rem;
+}
+
+.search-bar {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.main-search {
+    border: 5px solid #426E87;
+    border-radius: 10px;
 }
 
 .quick-search {
-    padding: 5px 20px;
-    margin: 5px 5px;
+    padding: 0.375rem 1rem;
+    margin: 0.375rem 0.375rem;
+}
+
+.select-header {
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+    background-color: #2F3131;
+    color:  #F8F7E5;
+}
+
+.select-body {
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    border: 5px solid #426E87;
+    border-radius: 10px;
+    background-color: #426E87;
+}
+
+.select-box {
+    padding: 0.375rem 1rem;
+    margin: 0.2rem 0;
+    background-color: #B9C4C9;
+    color: #2F3131;
+}
+
+.select-box:hover {
+    background-color: #A9B4B9;
+    color: #2F3131;
+}
+
+.show-more {
+    color: #2F3131;
+    margin: 0.25rem 0.25rem;
+    font-weight: 600;
+}
+
+.show-more:hover {
+    color: #F8F7E5;
+}
+
+.results-display {
+    margin: auto;
 }
 
 .result {
-    width: 30%;
-    margin: 10px 10px
+    width: 45%;
+    margin: 0.5rem 0.5rem
 }
+
+.result-btn {
+    display: block;
+    margin: auto;
+    margin-bottom: 1rem;
+}
+
+.result-img, .featured-img {
+    height: auto;
+    display: block;
+    margin: auto;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.result-img {
+    width: 75%;
+}
+
+.result-text {
+    text-align: center;
+}
+
 
 footer {
   position: absolute;
@@ -38,13 +196,8 @@ footer {
   bottom: 0;
   left: 0;
   padding: 1rem;
-  background-color: #343a40;
+  background-color: #2F3131;
   text-align: center;
-}
-
-.footer-text {
-    margin: 0;
-    color: #ffff;
 }
 
 /* Chart Styles */
@@ -55,4 +208,64 @@ footer {
 
 .dc-chart text.pie-slice {
     fill: black;
+}
+
+.chart-title {
+    margin-bottom: 1rem;
+}
+
+.charts {
+    width: 100%;
+}
+
+
+@media screen and (max-width: 575px) {
+    
+    .featured-img {
+        width: 75%
+    }
+    
+    .result {
+        width: 75%;
+        margin: 0.5rem 0.5rem
+    }
+   
+}
+
+@media screen and (min-width: 992px) {
+    
+   .featured-book-lg {
+        display: block;
+        padding: 1rem 0.5rem;
+    }
+    
+    .featured-book-sm {
+        display: none;
+    }
+    
+    .side-bar-left {
+        display: block;
+        margin-left: 1.5rem
+    }
+    
+    .search-bar {
+        margin-right: 0.5rem;
+        margin-bottom: 0;
+    }
+    
+    #filter-expand {
+        display: none;
+    }
+    
+    .result {
+        width: 30%;
+        margin: 0.5rem 0.5rem
+    }
+    
+}
+
+@media screen and (min-width: 1200px) {
+    
+    
+   
 }
