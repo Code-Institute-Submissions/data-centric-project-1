@@ -1,157 +1,206 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header>
-    <h3>Search Results</h3>
-    <h6>Results: {{ no_of_results }}</h6>
-    <h6>{{ path }}</h6>
+<header class="d-flex justify-content-between">
+    <div>
+        <h3>Search Results</h3>
+        <h5>Results: {{ no_of_results }}</h5>
+    </div>
+    <div>
+        <button type="button" data-toggle="collapse" data-target="#filter-collapse" id="filter-expand" class="btn">Filters</button>
+    </div>
+    
     
 </header>
 
 <section class="row">
-    <section class="col-3">
-        <h6>Sort By</h6>
-        <ul>
-            {% if request.endpoint == "filtered_filter_by" %}
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "filtered_filter_sort_by" %}
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "filter_by_author" %}
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "filtered_sort_by_author" %}
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "filter_by_genre" %}
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "filtered_sort_by_genre" %}
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% elif request.endpoint == "sorted_by" %}
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
-                </li>
-                <li>
-                    <a href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
-                </li>
-            {% endif %}
-        </ul>
-            
-        
+    
+    <!--Side Bar for Larger Screens-->
+    
+    <section class="col-lg-3 side-bar-left select-body">
         <div>
             <a href="{{ url_for('search_result', search_term=search_term) }}">
                 <button class="btn">Clear Filters</button>
             </a>
         </div>
         <div>
-            <h6>Genres</h6>
-            <ul>
-                {% for genre in genres %}
-                <li>
-                    {% if request.endpoint == "filtered_sort_by_author" %}
-                        <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by, sort_by=sort_by) }}">{{ genre }}</a>
-                    {% elif request.endpoint == "filter_by_author" %}
-                        <a href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by) }}">{{ genre }}</a>
-                    {% elif request.endpoint == "sorted_by" %}
-                        <a href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=genre, sort_by=sort_by) }}">{{ genre }}</a>
-                    {% else %}
-                        <a href="{{ url_for('filter_by_genre', search_term=search_term, filter_by=genre) }}">{{ genre }}</a>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
+            <h5 class="select-header">Sort By</h5>
+            <div class="d-flex flex-column">
+                {% if request.endpoint == "filtered_filter_by" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "filtered_filter_sort_by" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "filter_by_author" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "filtered_sort_by_author" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "filter_by_genre" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "filtered_sort_by_genre" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% elif request.endpoint == "sorted_by" %}
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% else %}
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
+                    <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                {% endif %}
+            </div>
         </div>
+        
         <div>
-            <h6>Authors</h6>
-            <ul>
-                {% for author in authors %}
-                <li>
-                    {% if request.endpoint == "filtered_sort_by_genre" %}
-                        <a href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author, sort_by=sort_by) }}">{{ author }}</a>
-                    {% elif request.endpoint == "filter_by_genre" %}
-                        <a href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author) }}">{{ author }}</a>
-                    {% elif request.endpoint == "sorted_by" %}
-                        <a href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=author, sort_by=sort_by) }}">{{ author }}</a>
-                    {% else %}
-                        <a href="{{ url_for('filter_by_author', search_term=search_term, filter_by=author) }}">{{ author }}</a>
-                    {% endif %}
-                </li>
+            <h5 class="select-header">Genres</h5>
+            <div class="d-flex flex-column genres-lg">
+                {% for genre in genres %}
+                {% if request.endpoint == "filtered_sort_by_author" %}
+                <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by, sort_by=sort_by) }}">{{ genre }}</a>
+                {% elif request.endpoint == "filter_by_author" %}
+                <a class="select-box" href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by) }}">{{ genre }}</a>
+                {% elif request.endpoint == "sorted_by" %}
+                <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=genre, sort_by=sort_by) }}">{{ genre }}</a>
+                {% else %}
+                <a class="select-box" href="{{ url_for('filter_by_genre', search_term=search_term, filter_by=genre) }}">{{ genre }}</a>
+                {% endif %}
                 {% endfor %}
-            </ul>
+            </div>
+            <a href="#" class="show-genres show-more">More... </a>
+        </div>
+        
+        <div>
+            <h5 class="select-header">Authors</h5>
+            <div class="d-flex flex-column authors-lg">
+                {% for author in authors %}
+                {% if request.endpoint == "filtered_sort_by_genre" %}
+                <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author, sort_by=sort_by) }}">{{ author }}</a>
+                {% elif request.endpoint == "filter_by_genre" %}
+                <a class="select-box" href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author) }}">{{ author }}</a>
+                {% elif request.endpoint == "sorted_by" %}
+                <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=author, sort_by=sort_by) }}">{{ author }}</a>
+                {% else %}
+                <a class="select-box" href="{{ url_for('filter_by_author', search_term=search_term, filter_by=author) }}">{{ author }}</a>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <a href="#" class="show-authors show-more">More... </a>
         </div>
     </section>
-    <section class="col-9">
-        <article class="d-flex flex-row flex-wrap">
-        {% for result in results %}
-        <div class="result">
-            <h6>{{ loop.index }}. {{ result.title }}</h6>
-            <p>By {{ result.author }}</p>
-            <a href="{{ url_for('book_record', book_id=result._id) }}">
-                <button class="btn" >View Book</button>
+    
+    
+    <!--Filter Bar for Smaller Screens-->
+    
+    <section  id="filter-collapse" class="col-sm-12 select-body collapse">
+        <div>
+            <a href="{{ url_for('search_result', search_term=search_term) }}">
+                <button class="btn">Clear Filters</button>
             </a>
-            
         </div>
-        {% endfor %}
-        
-        {% with messages = get_flashed_messages() %}
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <h5 class="select-header">Sort By</h5>
+                <div class="d-flex flex-column">
+                    {% if request.endpoint == "filtered_filter_by" %}
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "filtered_filter_sort_by" %}
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by_1, filter_by_2=filter_by_2, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "filter_by_author" %}
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "filtered_sort_by_author" %}
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "filter_by_genre" %}
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "filtered_sort_by_genre" %}
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=filter_by, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% elif request.endpoint == "sorted_by" %}
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% else %}
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='views') }}">Views</a>
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='avg_rating') }}">Rating</a>
+                        <a class="select-box" href="{{ url_for('sorted_by', search_term=search_term, sort_by='no_of_reviews') }}">No. of Reviews</a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="col-md-4 col-sm-12">
+                <h5 class="select-header">Genres</h5>
+                <div class="d-flex flex-column genres-sm">
+                    {% for genre in genres %}
+                    {% if request.endpoint == "filtered_sort_by_author" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by, sort_by=sort_by) }}">{{ genre }}</a>
+                    {% elif request.endpoint == "filter_by_author" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=genre, filter_by_2=filter_by) }}">{{ genre }}</a>
+                    {% elif request.endpoint == "sorted_by" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_genre', search_term=search_term, filter_by=genre, sort_by=sort_by) }}">{{ genre }}</a>
+                    {% else %}
+                    <a class="select-box" href="{{ url_for('filter_by_genre', search_term=search_term, filter_by=genre) }}">{{ genre }}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <a href="#" class="show-genres show-more">More... </a>
+            </div>
+            
+            <div class="col-md-4 col-sm-12">
+                <h5 class="select-header">Authors</h5>
+                <div class="d-flex flex-column authors-sm">
+                    {% for author in authors %}
+                    {% if request.endpoint == "filtered_sort_by_genre" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_sort_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author, sort_by=sort_by) }}">{{ author }}</a>
+                    {% elif request.endpoint == "filter_by_genre" %}
+                    <a class="select-box" href="{{ url_for('filtered_filter_by', search_term=search_term, filter_by_1=filter_by, filter_by_2=author) }}">{{ author }}</a>
+                    {% elif request.endpoint == "sorted_by" %}
+                    <a class="select-box" href="{{ url_for('filtered_sort_by_author', search_term=search_term, filter_by=author, sort_by=sort_by) }}">{{ author }}</a>
+                    {% else %}
+                    <a class="select-box" href="{{ url_for('filter_by_author', search_term=search_term, filter_by=author) }}">{{ author }}</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <a href="#" class="show-authors show-more">More... </a>
+            </div>
+        </div>
+    </section>
+    
+    
+    <section class="col-lg-8 col-sm-12 results-display">
+        <article class="d-flex flex-wrap justify-content-center">
+            {% for result in results %}
+            <div class="result">
+                <img class="result-img" src="{{ url_for('static', filename='images/book_cover_coming_thumbnail.jpg') }}" alt="No Image Available"></img>
+                <h6 class="result-text">{{ result.title }}</h6>
+                <p class="result-text">By {{ result.author }}</p>
+                <a href="{{ url_for('book_record', book_id=result._id) }}">
+                    <button class="btn result-btn" >View Book</button>
+                </a>
+            </div>
+            {% endfor %}
+            
+            {% with messages = get_flashed_messages() %}
             {% if messages %}
             <div class="flashes">
                 {% for message in messages %}
@@ -159,9 +208,40 @@
                 {% endfor %}
             </div>
             {% endif %}
-        {% endwith %}
+            {% endwith %}
         </article>
     </section>
 </section>
+
+<script type="text/javascript">
+
+$( document ).ready(function() {
+    
+    $(".genres-sm a:gt(3)").hide();
+    $(".show-genres").click(function() {
+        $(".genres-sm a:gt(3)").show();
+        $(".show-genres").hide();
+    });
+    
+    $(".authors-sm a:gt(3)").hide();
+    $(".show-authors").click(function() {
+        $(".authors-sm a:gt(3)").show();
+        $(".show-authors").hide();
+    });
+    
+    $(".genres-lg a:gt(3)").hide();
+    $(".show-genres").click(function() {
+        $(".genres-lg a:gt(3)").show();
+        $(".show-genres").hide();
+    });
+    
+    $(".authors-lg a:gt(3)").hide();
+    $(".show-authors").click(function() {
+        $(".authors-lg a:gt(3)").show();
+        $(".show-authors").hide();
+    });
+    
+});
+</script>
 
 {% endblock %}
