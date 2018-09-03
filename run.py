@@ -24,7 +24,6 @@ mongo.db.books.create_index(
             ("publisher", "text")
         ])
 
-
 @app.route("/")
 def index():
     
@@ -50,21 +49,19 @@ def index():
         _book["views"] = book["views"]
         
         most_viewed.append(_book)
-        
     
     # Randomized featured book
     i = randint(0, (len(books) - 1)) 
     featured_book = books[i]
     
     # List of genres to filter by
-    _genres = get_genres()
-    
+    genres = get_genres()
     
     return render_template("index.html",
                             books=books,
                             featured=featured_book,
                             most_viewed=most_viewed,
-                            genres=_genres)
+                            genres=genres)
 
 
 @app.route("/search_result")
@@ -603,6 +600,8 @@ def delete_book(book_id):
     mongo.db.books.remove({"_id": ObjectId(book_id)})
     
     return redirect(url_for("index"))
+    
+ ### Helper Functions
 
     
 def find_all_books():
@@ -627,7 +626,7 @@ def find_last_inserted():
 def get_genres():
     
     _genres = mongo.db.books.find({}, { "genre": 1, "_id": 0 })
-    genre_list = ["".join(genre["genre"]) for genre in _genres]
+    genre_list = [genre["genre"] for genre in _genres]
     
     genres = []
     for genre in genre_list:
@@ -639,7 +638,7 @@ def get_genres():
 def get_authors():
     
     _authors = mongo.db.books.find({}, { "author": 1, "_id": 0 })
-    author_list = ["".join(author["author"]) for author in _authors]
+    author_list = [author["author"] for author in _authors]
     
     authors = []
     for author in author_list:
@@ -647,7 +646,6 @@ def get_authors():
             authors.append(author)
     
     return authors
-    
     
     
     ### Test CRUD Operations
