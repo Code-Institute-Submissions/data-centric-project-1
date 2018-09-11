@@ -2,62 +2,86 @@
 {% block content %}
 
 <header>
-    <h3>Book Record</h3>
+    <h3 class="header-text">Book Record</h3>
 </header>
 
 <section class="row content">
-    <article class="col-sm-12 col-lg-5">
-        <div class="row">
-            <a href="{{ url_for('edit_book', book_id=book._id) }}"><button class="btn">Edit</button></a>
-            <a href="{{ url_for('delete_book', book_id=book._id) }}"><button class="btn">Delete</button></a>
-        </div>
-        <div>
-            <img class="img-fluid" src="{{ url_for('static', filename='images/book_cover_coming.jpg') }}" alt="No Image Available"></img>
-        </div>
-        <h5>{{ book.publisher }}</h5>
-        <h6>Rating: {{ rating }}/5</h6>
-        <div id="bar_chart"></div>
-    </article>
+    <div class="col-sm-12 col-lg-3">   
+        <img class="book-img" src="{{ url_for('static', filename='images/book_cover_coming.jpg') }}" alt="No Image Available"></img>
+    </div>
     <article class="col-sm-12 col-lg-7">
-        <h5>{{ book.title }}</h5>
-        <h5>{{ book.author }}</h5>
-        <h5>{{ book.genre }}</h5>
+        <h4>{{ book.title }}</h4>
+        <h5>By {{ book.author }}</h5>
         <p>{{ book.blurb }}</p>
+        <h5>Published by {{ book.publisher }}</h5>
+        <h5>{{ book.genre }}</h5>
+    </article>
+    <article class="col-sm-6 col-lg-2">
+        <div class="row">
+            <a href="{{ url_for('edit_book', book_id=book._id) }}">
+                <button class="btn book-btn">Edit</button>
+            </a>
+            <button class="btn book-btn" data-toggle="modal" data-target="#confirmation">Delete?</button>
+            <div id="confirmation" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confim</h5>
+                        </div>
+                        <div class="modal-body">
+                            <h6>Are you sure you want to delete?</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn book-btn" data-dismiss="modal">Close</button>
+                            <a href="{{ url_for('delete_book', book_id=book._id) }}">
+                                <button class="btn book-btn">Delete</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <h6 class="chart-title">Rating: {{ rating }}/5</h6>
+        <div id="bar_chart" class="charts"></div>
     </article>
 </section>
 
 <section class="content">
-    <form action="{{ url_for('update_reviews', book_id=book._id) }}" method="POST">
-        <div class="row">
-            <div class="form-group col-sm-6">
-                <label for="review.name">Name</label>
-                <input id="review.name" name="review.name" class="form-control" type="text" required>
+    <button type="button" data-toggle="collapse" data-target="#review-collapse" id="review-expand" class="btn">Write a Review</button>
+    <div id="review-collapse" class="collapse">
+        <form action="{{ url_for('update_reviews', book_id=book._id) }}" method="POST">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="review.name">Name</label>
+                    <input id="review.name" name="review.name" class="form-control" type="text" required>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="review.review">Review</label>
+                    <textarea id="review.review" name="review.review" class="form-control" type="text" rows="2" required></textarea></textarea>
+                </div>
             </div>
-            <div class="form-group col-sm-6">
-                <label for="review.review">Review</label>
-                <textarea id="review.review" name="review.review" class="form-control" type="text" rows="2" required></textarea></textarea>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="rating">Rating</label>
+                    <span><input name="rating" id="1_star" type="radio" value="1" required><label for="rating">1</label></span>
+                    <span><input name="rating" id="2_star" type="radio" value="2" required><label for="rating">2</label></span>
+                    <span><input name="rating" id="3_star" type="radio" value="3" required><label for="rating">3</label></span>
+                    <span><input name="rating" id="4_star" type="radio" value="4" required><label for="rating">4</label></span>
+                    <span><input name="rating" id="5_star" type="radio" value="5" required><label for="rating">5</label></span>
+                </div>
+                <div class="form-group col-sm-6">
+                     <button type="submit" class="btn">Add Review</button>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-sm-6">
-                <label for="rating">Rating</label>
-                <span><input name="rating" id="1_star" type="radio" value="1" required><label for="rating">1</label></span>
-                <span><input name="rating" id="2_star" type="radio" value="2" required><label for="rating">2</label></span>
-                <span><input name="rating" id="3_star" type="radio" value="3" required><label for="rating">3</label></span>
-                <span><input name="rating" id="4_star" type="radio" value="4" required><label for="rating">4</label></span>
-                <span><input name="rating" id="5_star" type="radio" value="5" required><label for="rating">5</label></span>
-            </div>
-            <div class="form-group col-sm-6">
-                 <button type="submit" class="btn">Add Review</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </section>
 
 <section class="row content">
     {% for review in reviews %}
-    <div>
-        <h6>{{ review.name }}</h6>
+    <div class="review">
+        <h5>{{ review.name }}</h5>
         <h6>Rating: {{ review.rating }}/5</h6>
         <p>{{ review.review }}</p>
     </div>
@@ -68,20 +92,26 @@
 
     var bar_chart = dc.barChart("#bar_chart")
     
-    var most_viewed = {{ ratings }};
+    var ratings = {{ ratings | tojson | safe }};
         
-    var ndx = crossfilter(most_viewed),
-        numbers = ndx.dimension(function(d) {return {"number1": 1, "number2": 2, "number3": 3, "number4": 4, "number5": 5};}),
-        groupNumberByCount = numbers.group();
+    var ndx = crossfilter(ratings),
+        rating = ndx.dimension(function(d) {return d.rating;}),
+        ratingByCount = rating.group().reduceSum(function(d) {return +d.count;});
     
     bar_chart
-        .width(320)
-        .height(240)
-        .x(d3.scaleLinear().domain([1,5]))
         .brushOn(false)
-        .dimension(numbers)
-        .group(groupNumberByCount)
+        .dimension(rating)
+        .group(ratingByCount)
+        .x(d3.scaleLinear().domain([0.5, 5.5]))
+        .elasticY(true)
+        .centerBar(true)
+        .xAxisLabel("Rating")
+        .gap(1)
+        .xAxis().ticks(5);
         
+    bar_chart.yAxis().tickFormat(
+        function(v) { return ""; });
+            
     bar_chart    
         .render();
         

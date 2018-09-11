@@ -2,16 +2,11 @@
 {% block content %}
 
 <header>
-    <h3>Add Book</h3>
-    <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-    sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-    magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-    quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-    ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
-    dolor in hendrerit in vulputate velit esse molestie consequat,
-    vel illum dolore eu feugiat nulla facilisis at vero eros et
-    accumsan et iusto odio dignissim qui blandit praesent luptatum
-    zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+    <h3 class="header-text">Add Book</h3>
+    <p class="header-text">To add your new book, please fill in the form below with
+    the required information. All the fields are required. Please
+    only enter one author and genre. If you wish to start again you
+    can click 'Clear' at the bottom.</p>
 </header>
 
 <section class="content">
@@ -55,9 +50,9 @@
         </div>
         <div class="d-flex justify-content-around">
             <a href="{{ url_for('add_book') }}">
-                <button class="btn">Clear</button>
+                <button class="btn btn-margin">Clear</button>
             </a>
-            <button type="submit" class="btn">Add Book</button>
+            <button type="submit" class="btn btn-margin">Add Book</button>
         </div>
     </form>
 </section>

@@ -2,47 +2,31 @@
 {% block content %}
 
 <header>
-    <h3>Welcome!</h3>
-    <p>
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-        quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-        ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
-        dolor in hendrerit in vulputate velit esse molestie consequat,
-        vel illum dolore eu feugiat nulla facilisis at vero eros et
-        accumsan et iusto odio dignissim qui blandit praesent luptatum
-        zzril delenit augue duis dolore te feugait nulla facilisi.
-    </p>
+    <h3 class="header-text">Welcome to Books You'll Love</h3> 
+    <p class="header-text">Here you can share your favourite books with friends or a new book
+    with everyone. Search for a book in the library or have a look by genre
+    and see what takes your fancy. Take a look at Featured Book you never 
+    know what might come up. See what everyone is looking at with Most Viewed,
+    maybe see what the hype is about?</p>
 </header>
 
 <section class="row content">
     <div class="col-lg-6 offset-lg-3 col-sm-12">
         <form class="search-form" action="{{ url_for('search_result') }}">
             <div class="form-group">
-                <input class="form-control main-search" id="search_term" name="search_term" type="search" placeholder="Search Something?">
+                <input class="form-control main-search" id="search_term" name="search_term" type="search" placeholder="Search Something?" required>
             </div>
             <div class="d-flex justify-content-center">
                 <button class="btn search-btn" type="submit">Search</button>
             </div>
         </form>
     </div>
-    <div class="col-lg-3 col-sm-12">
-        <h6>Quick Searchs</h6>
-        <div class="row justify-content-center">
-            {% for genre in genres %}
-            <a href="{{ url_for('filter_by_genre', search_term=genre, filter_by=genre) }}">
-                <button class="btn quick-search">{{ genre }}</button>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
 </section>
 
 
 
 <section class="row content">
-    <article class="col-lg-8 featured-book-lg">
+    <article class="col-lg-9 featured-book-lg">
         <div class="row">
             <div class="col-lg-5">
                 <img class="featured-img" src="{{ url_for('static', filename='images/book_cover_coming.jpg') }}" alt="No Image Available"></img>
@@ -62,6 +46,36 @@
             </div>
         </div>
     </article>
+    <div class="col-lg-3 col-sm-12 quicks-lg">
+        <p class="search-header">Stuck on what to look for, try one of our</p>
+        <p class="search-title">Quick Searches</p>
+        
+        <div id="quick-searches" class="row justify-content-center">
+            {% for genre in genres %}
+            <a href="{{ url_for('filter_by_genre', search_term=genre, filter_by=genre) }}">
+                <button class="btn quick-search">{{ genre }}</button>
+            </a>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="#" class="show-searches show-more">More... </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-sm-12 quicks-sm">
+        <p class="search-header">Stuck on what to look for, try one of our</p>
+        <p class="search-title">Quick Searches</p>
+        
+        <div id="quick-searches" class="row justify-content-center">
+            {% for genre in genres %}
+            <a href="{{ url_for('filter_by_genre', search_term=genre, filter_by=genre) }}">
+                <button class="btn quick-search">{{ genre }}</button>
+            </a>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="#" class="show-searches show-more">More... </a>
+        </div>
+    </div>
     <article class="col-sm-12 featured-book-sm">
         <div class="row">
             <div class="col-sm-6">
@@ -84,26 +98,14 @@
             </div>
         </div>
     </article>
-    <article class="col-sm-12 col-lg-4 about-body">
-        <h4 class="about-header">About</h4>
-        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
-        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
-        quis nostrud exerci tation ullamcorper suscipit lobortis nisl
-        ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
-        dolor in hendrerit in vulputate velit esse molestie consequat,
-        vel illum dolore eu feugiat nulla facilisis at vero eros et
-        accumsan et iusto odio dignissim qui blandit praesent luptatum
-        zzril delenit augue duis dolore te feugait nulla facilisi.</p>
-    </article>
 </section>
 
 <section class="row content">
-    <article class="col-sm-12 col-lg-5">
+    <article class="col-md-12 col-lg-5">
         <h6 class="chart-title">Most Viewed By Genre</h6>
         <div id="pie_chart" class="charts"></div>
     </article>
-    <article class="col-sm-12 col-lg-7">
+    <article class="col-md-12 col-lg-7">
         <h6 class="chart-title">Most Viewed By Title</h6>
         <div id="row_chart" class="charts"></div>
     </article>

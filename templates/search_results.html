@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 
-<header class="d-flex justify-content-between">
-    <div>
-        <h3>Search Results</h3>
-        <h5>Results: {{ no_of_results }}</h5>
+<header>
+    <div class="d-flex justify-content-between">
+        <div>
+            <h3>Search Results</h3>
+            <h5>Results: {{ no_of_results }}</h5>
+        </div>
+        <div>
+            <button type="button" data-toggle="collapse" data-target="#filter-collapse" id="filter-expand" class="btn">Filters</button>
+        </div>
     </div>
-    <div>
-        <button type="button" data-toggle="collapse" data-target="#filter-collapse" id="filter-expand" class="btn">Filters</button>
-    </div>
-    
-    
 </header>
+
+<section class="row justify-content-center content">
+    <div>
+        <h6 class="search-title">Quick Search</h6>
+        {% for genre in genres %}
+        <a href="{{ url_for('filter_by_genre', search_term=genre, filter_by=genre) }}">
+            <button class="btn quick-search">{{ genre }}</button>
+        </a>
+        {% endfor %}
+    </div>
+</section>
 
 <section class="row">
     
@@ -102,7 +113,7 @@
     
     <!--Filter Bar for Smaller Screens-->
     
-    <section  id="filter-collapse" class="col-sm-12 select-body collapse">
+    <section id="filter-collapse" class="col-sm-10 select-body collapse">
         <div>
             <a href="{{ url_for('search_result', search_term=search_term) }}">
                 <button class="btn">Clear Filters</button>
@@ -212,36 +223,4 @@
         </article>
     </section>
 </section>
-
-<script type="text/javascript">
-
-$( document ).ready(function() {
-    
-    $(".genres-sm a:gt(3)").hide();
-    $(".show-genres").click(function() {
-        $(".genres-sm a:gt(3)").show();
-        $(".show-genres").hide();
-    });
-    
-    $(".authors-sm a:gt(3)").hide();
-    $(".show-authors").click(function() {
-        $(".authors-sm a:gt(3)").show();
-        $(".show-authors").hide();
-    });
-    
-    $(".genres-lg a:gt(3)").hide();
-    $(".show-genres").click(function() {
-        $(".genres-lg a:gt(3)").show();
-        $(".show-genres").hide();
-    });
-    
-    $(".authors-lg a:gt(3)").hide();
-    $(".show-authors").click(function() {
-        $(".authors-lg a:gt(3)").show();
-        $(".show-authors").hide();
-    });
-    
-});
-</script>
-
 {% endblock %}

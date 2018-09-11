@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<header>
+    <h3 class="header-text">My Books</h3>
+</header>
+
+<section class="content">
+    <h4>Login</h4>
+    <p>To view your books you have favourited just enter your username
+    below. If you are new to the site just register by entering your 
+    name as a new user and you can start to favourite the books you love.</p>
+</section>
+
+<section class="row content">
+    <div class="col-lg-6 col-sm-12">
+        <h5>New User</h5>
+        <form id="newUser" action="{{ url_for('new_user') }}">
+            <div class="form-group">
+                <label for="newUser">Username</label>
+                <input id="newUser" type="text" class="form-control" name="newUser" placeholder="Enter your username" required>
+            </div>
+            <button type="submit" class="btn btn-margin">Register</button>
+        </form>
+    </div>
+    <div class="col-lg-6 col-sm-12">
+        <h5>Existing User</h5>
+        <form id="existingUser" action="{{ url_for('existing_user') }}">
+            <div class="form-group">
+                <label for="existingUser">Username</label>
+                <input id="existingUser" type="text" class="form-control" name="existingUser" placeholder="Enter your username" required>
+            </div>
+            <button type="submit" class="btn btn-margin">Login</button>
+        </form>
+    </div>
+</section>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flashes">
+        {% for message in messages %}
+        <h5>{{ message }}</h5>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+{% endblock %} 
