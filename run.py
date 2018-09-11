@@ -62,6 +62,58 @@ def index():
                             featured=featured_book,
                             most_viewed=most_viewed,
                             genres=genres)
+                            
+@app.route("/my_books", defaults={'error': None})
+@app.route("/my_books/<error>")
+def my_books(error):
+    
+    """
+    Login
+    """
+    
+    if error == "newUser":
+        flash("This username is not available. Please try again.")
+    elif error == "existingUser":
+        flash("This username does not exist. Please try again.")
+    
+    return render_template("my_books.html")
+    
+@app.route("/user_books/<username>")
+def user_books(username):
+    
+    """
+    User Book library
+    """
+    
+    return render_template("user_books.html", username=username)
+    
+@app.route("/new_user")
+def new_user():
+    
+    error = "newUser"
+    username = request.args["newUser"]
+    all_users = get_all_users()
+    
+    if username in all_users:
+        return redirect(url_for("my_books", error=error))
+    else:
+        mongo.db.users.insert({
+            "username": username,
+            "books": []
+        })
+        return redirect(url_for("user_books", username=username))
+    
+@app.route("/existing_user")
+def existing_user():
+    
+    error = "existingUser"
+    username = request.args["existingUser"]
+    all_users = get_all_users()
+    
+    if username not in all_users:
+        return redirect(url_for("my_books", error=error))
+    else:
+        return redirect(url_for("user_books", username=username))
 
 
 @app.route("/search_result")
@@ -73,10 +125,6 @@ def search_result():
     
     search_term = request.args.get("search_term")
     
-    if search_term == "":
-        flash("Search Something?")
-    
-    # Search Results
     search_result = mongo.db.books.find(
         { "$text":
             { "$search": search_term }
@@ -111,9 +159,6 @@ def sorted_by(sort_by, search_term):
     """
     Search Results for search term, sorted by an option
     """
-    
-    if search_term == "":
-        flash("Search Something?")
     
     search_result = mongo.db.books.aggregate(
         [
@@ -156,9 +201,6 @@ def filter_by_genre(filter_by, search_term):
     """
     Search Results for search term, filtered by a genre
     """
-    
-    if search_term == "":
-        flash("Search Something?")
     
     search_result = mongo.db.books.aggregate([
            { "$match": 
@@ -204,9 +246,6 @@ def filtered_sort_by_genre(filter_by, sort_by, search_term):
     """
     Search Results for search term, filtered by a genre and sorted by an option
     """
-    
-    if search_term == "":
-        flash("Search Something?")
     
     search_result = mongo.db.books.aggregate([
            { "$match": 
@@ -257,9 +296,6 @@ def filter_by_author(filter_by, search_term):
     Search Results for search term, filtered by a author
     """
     
-    if search_term == "":
-        flash("Search Something?")
-    
     search_result = mongo.db.books.aggregate([
            { "$match": 
                { "$and": 
@@ -304,9 +340,6 @@ def filtered_sort_by_author(filter_by, sort_by, search_term):
     """
     Search Results for search term, filtered by a author and sorted by an option
     """
-    
-    if search_term == "":
-        flash("Search Something?")
     
     search_result = mongo.db.books.aggregate([
            { "$match": 
@@ -357,9 +390,6 @@ def filtered_filter_by(filter_by_1, filter_by_2, search_term):
     Search Results for search term, filtered by a genre and author
     """
     
-    if search_term == "":
-        flash("Search Something?")
-    
     search_result = mongo.db.books.aggregate([
            { "$match": 
                { "$and": 
@@ -409,9 +439,6 @@ def filtered_filter_sort_by(filter_by_1, filter_by_2, sort_by, search_term):
     Search Results for search term, 
     filtered by a genre and author, and sorted by an option 
     """
-    
-    if search_term == "":
-        flash("Search Something?")
     
     search_result = mongo.db.books.aggregate([
            { "$match": 
@@ -472,7 +499,20 @@ def book_record(book_id):
     # Get rating for book record
     avg_rating = book_record["avg_rating"]
     
-    ratings = book_record["ratings"]
+    _ratings = book_record["ratings"]
+    
+    no_1 = _ratings.count(1)
+    no_2 = _ratings.count(2)
+    no_3 = _ratings.count(3)
+    no_4 = _ratings.count(4)
+    no_5 = _ratings.count(5)
+    
+    rating_total = [
+        {"rating": 1, "count": no_1 },
+        {"rating": 2, "count": no_2 },
+        {"rating": 3, "count": no_3 },
+        {"rating": 4, "count": no_4 },
+        {"rating": 5, "count": no_5 }]
     
     # Get reviews for book record
     _reviews = book_record["reviews"]
@@ -491,7 +531,7 @@ def book_record(book_id):
     return render_template("book_record.html", 
                             book=book_record,
                             rating=avg_rating,
-                            ratings=ratings,
+                            ratings=rating_total,
                             reviews=_reviews)
 
 @app.route("/update_reviews/<book_id>", methods=["GET", "POST"])
@@ -525,7 +565,7 @@ def update_reviews(book_id):
     
     # Gets the avg rating for the book 
     _ratings = book["ratings"]
-    ratings = sum(_ratings)/len(_ratings)
+    ratings = float(sum(_ratings)) / max(len(_ratings), 1)
     avg_rating = round(ratings, 1)
     
     mongo.db.books.update({ "_id": ObjectId( book_id )},
@@ -548,7 +588,7 @@ def insert_book():
 
     # Insert new book record
     
-    mongo.db.books.insert_one({
+    mongo.db.books.insert({
             "title": request.form["title"],
             "author": request.form["author"],
             "genre": request.form["genre"],
@@ -563,8 +603,9 @@ def insert_book():
         })
         
     last_book = find_last_inserted()
+    last_book_id = last_book["_id"]
     
-    return redirect(url_for("book_record", book_id=last_book._id))
+    return redirect(url_for("book_record", book_id=last_book_id))
     
 @app.route("/edit_book/<book_id>")
 def edit_book(book_id):
@@ -647,8 +688,17 @@ def get_authors():
     
     return authors
     
+def get_all_users():
+    
+    _all_users = mongo.db.users.find()
+    all_users = [user["username"] for user in _all_users]
+    
+    return all_users
+    
+    
     
     ### Test CRUD Operations
+    
     
 def find_test_book(book_id):
     
@@ -720,6 +770,7 @@ def update_test_reviews(book_id):
         }
     })
     
+
 
 if __name__ == "__main__":
     app.run(host= os.environ.get("IP"),
