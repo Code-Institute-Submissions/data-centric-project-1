@@ -85,7 +85,19 @@ def user_books(username):
     User Book library
     """
     
-    return render_template("user_books.html", username=username)
+    user = mongo.db.users.find_one({ "username": username })
+    _books = user["books"]
+    
+    books = []
+    for book in _books:
+        _book = find_book(book)
+        books.append(_book)
+        
+    
+    return render_template("user_books.html",
+                            username=username,
+                            user=user,
+                            results=books)
     
 @app.route("/new_user")
 def new_user():
@@ -576,6 +588,21 @@ def update_reviews(book_id):
     })
     
     return redirect(url_for("book_record", book_id=book_id))
+    
+@app.route("/recommend/<book_id>", methods=["GET", "POST"])
+def recommend(book_id):
+    
+    username = request.form["username"]
+    
+    mongo.db.users.update({ "username": username },
+    { "$push":
+        {
+            "books": book_id
+        }
+    })
+    
+    return redirect(url_for("user_books", username=username))
+    
 
 @app.route("/add_book")
 def add_book():
