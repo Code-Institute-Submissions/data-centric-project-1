@@ -7,9 +7,32 @@
 
 <section class="content">
     <h4>Welcome {{ username }}</h4>
-    <p>To view your books you have favourited just enter your username
-    below. If you are new to the site just enter your name as a new 
-    user and you can start to favourite the books you love.</p>
+    
+    
+    <section class="col-lg-8 col-sm-12 results-display">
+        <article class="d-flex flex-wrap justify-content-center">
+            {% for result in results %}
+            <div class="result">
+                <img class="result-img" src="{{ url_for('static', filename='images/book_cover_coming_thumbnail.jpg') }}" alt="No Image Available"></img>
+                <h6 class="result-text">{{ result.title }}</h6>
+                <p class="result-text">By {{ result.author }}</p>
+                <a href="{{ url_for('book_record', book_id=result._id) }}">
+                    <button class="btn result-btn" >View Book</button>
+                </a>
+            </div>
+            {% endfor %}
+            
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                <h5>{{ message }}</h5>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+        </article>
+    </section>
 </section>
 
 {% endblock %}
