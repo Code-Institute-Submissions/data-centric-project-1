@@ -5,7 +5,7 @@
     <h3 class="header-text">My Books</h3>
 </header>
 
-<section class="content">
+<section class="content header-text">
     <h4>Login</h4>
     <p>To view your books you have favourited just enter your username
     below. If you are new to the site just register by entering your 
@@ -37,9 +37,9 @@
 <section class="row justify-content-center">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <div class="flashes">
+    <div class="flashes error">
         {% for message in messages %}
-        <h5>{{ message }}</h5>
+        <h6>{{ message }}</h6>
         {% endfor %}
     </div>
     {% endif %}

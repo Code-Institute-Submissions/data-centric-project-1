@@ -5,12 +5,12 @@
     <h3 class="header-text">Add Book</h3>
     <p class="header-text">To add your new book, please fill in the form below with
     the required information. All the fields are required. Please
-    only enter one author and genre. If you wish to start again you
+    only enter the main author and one genre. If you wish to start again you
     can click 'Clear' at the bottom.</p>
 </header>
 
 <section class="content">
-    <form action="{{ url_for('insert_book') }}" method="POST">
+    <form id="add-book" action="{{ url_for('insert_book') }}" method="POST">
         <div class="form-group row">
             <label for="title" class="col-sm-2 col-form-label">Title</label>
             <div class="col-sm-10">
@@ -21,12 +21,14 @@
             <label for="author" class="col-sm-2 col-form-label">Author</label>
             <div class="col-sm-10">
                 <input id="author" name="author" class="form-control" type="text" placeholder="Your Book Author" required>
+                <small id="author-help" class="form-text text-muted">Please use only the main author.</small>
             </div>
         </div>
         <div class="form-group row">
             <label for="genre" class="col-sm-2 col-form-label">Genre</label>
             <div class="col-sm-10">
                 <input id="genre" name="genre" class="form-control" type="text" placeholder="Your Book Genre" required>
+                <small id="genre-help" class="form-text text-muted">Please use only one genre.</small>
             </div>
         </div>
         <div class="form-group row">
