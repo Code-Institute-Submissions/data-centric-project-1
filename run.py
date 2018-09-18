@@ -74,7 +74,7 @@ def my_books(error):
     if error == "newUser":
         flash("This username is not available. Please try again.")
     elif error == "existingUser":
-        flash("This username does not exist. Please try again.")
+        flash("This username does not exist. Please try again or Register.")
     
     return render_template("my_books.html")
     
@@ -91,7 +91,8 @@ def user_books(username):
     books = []
     for book in _books:
         _book = find_book(book)
-        books.append(_book)
+        if _book not in books:
+            books.append(_book)
         
     
     return render_template("user_books.html",
@@ -501,8 +502,9 @@ def filtered_filter_sort_by(filter_by_1, filter_by_2, sort_by, search_term):
 
  ### Book CRUD Operations
  
-@app.route("/book_record/<book_id>")
-def book_record(book_id):
+@app.route("/book_record/<book_id>", defaults={'message': None})
+@app.route("/book_record/<book_id>/<message>")
+def book_record(book_id, message):
     
     # Displays the book record with Edit and Delete opertations
     
@@ -533,12 +535,17 @@ def book_record(book_id):
     _views = book_record["views"]
     new_views = _views + 1
     
-    mongo.db.books.update({ "_id": ObjectId( book_id )},
+    mongo.db.books.update_one({ "_id": ObjectId( book_id )},
     { "$set":
         {
             "views": new_views
         }
     })
+    
+    if message == "no-user":
+        flash("This username does not exist. Please try again.", "error")
+    elif message == "success":
+        flash("This has been Successful Recommended.", "success")
     
     return render_template("book_record.html", 
                             book=book_record,
@@ -551,7 +558,7 @@ def update_reviews(book_id):
     
     # Update reviews and rating
     
-    mongo.db.books.update({"_id": ObjectId(book_id)},
+    mongo.db.books.update_one({"_id": ObjectId(book_id)},
     { "$push":
         {
         "reviews": {
@@ -568,7 +575,7 @@ def update_reviews(book_id):
     reviews = book["reviews"]
     no_of_reviews = len(reviews)
     
-    mongo.db.books.update({ "_id": ObjectId( book_id )},
+    mongo.db.books.update_one({ "_id": ObjectId( book_id )},
     { "$set":
         {
             "no_of_reviews": no_of_reviews
@@ -580,7 +587,7 @@ def update_reviews(book_id):
     ratings = float(sum(_ratings)) / max(len(_ratings), 1)
     avg_rating = round(ratings, 1)
     
-    mongo.db.books.update({ "_id": ObjectId( book_id )},
+    mongo.db.books.update_one({ "_id": ObjectId( book_id )},
     { "$set":
         {
             "avg_rating": avg_rating
@@ -592,17 +599,25 @@ def update_reviews(book_id):
 @app.route("/recommend/<book_id>", methods=["GET", "POST"])
 def recommend(book_id):
     
+    # Adds book to existing username's "My Books" 
+    
     username = request.form["username"]
     
-    mongo.db.users.update({ "username": username },
-    { "$push":
-        {
-            "books": book_id
-        }
-    })
+    all_users = get_all_users()
     
-    return redirect(url_for("user_books", username=username))
-    
+    if username not in all_users:
+        message = "no-user"
+        return redirect(url_for("book_record", book_id=book_id, message=message))
+    else:
+        message = "success"
+        mongo.db.users.update_one({ "username": username },
+        { "$push":
+            {
+                "books": book_id
+            }
+        })
+        
+        return redirect(url_for("book_record", book_id=book_id, message=message))
 
 @app.route("/add_book")
 def add_book():
@@ -647,7 +662,7 @@ def update_book(book_id):
     
     # Update book
     
-    mongo.db.books.update(
+    mongo.db.books.update_one(
         {"_id": ObjectId(book_id)},
         { "$set": 
             {
@@ -727,6 +742,14 @@ def get_all_users():
     ### Test CRUD Operations
     
     
+mongo.db.test.create_index(
+    [
+        ("title", "text"),
+        ("author", "text"),
+        ("genre", "text"),
+        ("publisher", "text")
+    ])
+    
 def find_test_book(book_id):
     
     # Finding book in Test collection
@@ -763,7 +786,7 @@ def update_test_book(book_id):
     
     # Update test book  
     
-    mongo.db.test.update(
+    mongo.db.test.update_one(
         {"_id": ObjectId(book_id)},
         { "$set": 
             {
@@ -772,7 +795,7 @@ def update_test_book(book_id):
                 "ISBN": "None"
             }
         })
-    mongo.db.test.update(
+    mongo.db.test.update_one(
         {"_id": ObjectId(book_id)},
         { "$addToSet":
             {
@@ -786,7 +809,7 @@ def update_test_reviews(book_id):
     
     # Update test reviews and rating
     
-    mongo.db.test.update({"_id": ObjectId(book_id)},
+    mongo.db.test.update_one({"_id": ObjectId(book_id)},
     { "$push":
         {
             "reviews": {
@@ -796,6 +819,19 @@ def update_test_reviews(book_id):
             "rating": 1
         }
     })
+    
+def text_search_test(search_term):
+    
+    # Text search with search term test
+    
+    search_result = mongo.db.test.find(
+        { "$text":
+            { "$search": search_term }
+        })
+    
+    results = [result for result in search_result]
+    
+    return results
     
 
 
