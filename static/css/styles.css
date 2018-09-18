@@ -5,7 +5,7 @@ html {
 body {
     position: relative;
     margin: 0;
-    padding-bottom: 6rem;
+    padding-bottom: 10rem;
     min-height: 100%;
     background-color: #E2E2E8;
     color: #2F3131;
@@ -139,6 +139,14 @@ header, .featured-book-sm, .featured-book-lg {
     box-shadow: none;
 }
 
+.error {
+    color: red!important; 
+}
+
+.success {
+    color: green!important;
+}
+
 .select-header {
     padding: 0.5rem 1rem;
     margin: 0.25rem 0;
@@ -209,6 +217,7 @@ header, .featured-book-sm, .featured-book-lg {
 }
 
 #review-expand {
+    margin: 0;
     margin-bottom: 1rem;
 }
 
