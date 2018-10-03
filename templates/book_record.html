@@ -43,6 +43,10 @@
             
         </div>
         <h6 class="chart-title">Rating: {{ rating }}/5</h6>
+        <h6 class="center">Total of each rating score</h6>
+        {% if rating == 0 %}
+        <p class="center">There are no ratings</p>
+        {% endif %}
         <div id="bar_chart" class="charts"></div>
     </article>
 </section>
