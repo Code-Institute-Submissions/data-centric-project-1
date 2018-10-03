@@ -212,7 +212,7 @@ header, .featured-book-sm, .featured-book-lg {
     width: 75%;
 }
 
-.result-text {
+.result-text, .center {
     text-align: center;
 }
 
