@@ -7,7 +7,6 @@ click==6.7
 cycler==0.10.0
 itsdangerous==0.24
 kiwisolver==1.0.1
-numpy==1.15.0
 pymongo==3.7.0
 pyparsing==2.2.0
 python-dateutil==2.7.3
