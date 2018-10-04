@@ -4,15 +4,13 @@ from flask import Flask, render_template, redirect, request, url_for, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from random import randint
-from mongodb import config
 
 
 app = Flask(__name__)
 app.secret_key = "some_secret"
 
-config(app)
-app.config["MONGO_URI"]
-app.config["MONGODB_NAME"]
+app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+app.config["MONGODB_NAME"] = os.environ.get("MONGODB_NAME")
 
 mongo = PyMongo(app)
 mongo.db.books.create_index(
