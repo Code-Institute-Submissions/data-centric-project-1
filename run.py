@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from random import randint
-from mongodb import config
+from env import config
 
 
 app = Flask(__name__)
