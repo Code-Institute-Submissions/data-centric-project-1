@@ -122,12 +122,15 @@ When deploying the project I needed to:
 ### Local
 
 To run locally you need to clone the repository
+
     - git clone https://github.com/TMcNally17/data-centric-project.git
 
 You need to install the dependencies in requirements.txt 
+
     - pip install -r requirements.txt
 
 Run the project
+
     - python3 run.py
 
 
