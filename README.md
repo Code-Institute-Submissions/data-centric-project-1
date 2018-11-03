@@ -105,7 +105,29 @@ The tests can be run by using the following command:
     1. cd tests
     2. python3 test_run.py
 
-I conducted manual tests through development to check each stage worked. I have documented these test here in [User Tests](/tests/user_tests.md/).
+I conducted manual tests through development to check each stage worked. I have documented these test here in [User Tests](/tests/user_test.md/).
 I have also tested my project for responsiveness and on different browsers which is detailed in [Browser Tests](/tests/browser_tests.pdf/)
+
+## Deployment
+
+### Heroku 
+
+My project is deployed on [Heroku](https://www.heroku.com/) hosting platform and can be viewed at [Books You'll Love](https://data-centric-project.herokuapp.com)
+When deploying the project I needed to:
+
+- Include a Procfile which tells Heroku what type of app it is and what to run it as
+- Scale the dynos which Heroku uses to help run apps
+- Set the Config Vars for the IP, PORT and Database
+
+### Local
+
+To run locally you need to clone the repository
+    - git clone https://github.com/TMcNally17/data-centric-project.git
+
+You need to install the dependencies in requirements.txt 
+    - pip install -r requirements.txt
+
+Run the project
+    - python3 run.py
 
 
