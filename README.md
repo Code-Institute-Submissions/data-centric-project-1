@@ -22,7 +22,7 @@ As a User I would want:
 - to be able to easily navigate website
 - to be informed about the website
 - to be able to search
-    
+
 As a User I would want:
 - to easily understand and read the form
 - to be clearly told where information goes
@@ -51,6 +51,9 @@ Mock ups can be viewed for each page below:
 ## Features
 
 ### Existing Features
+
+Currently these are the features that are implemented and how each feature 
+provides UX:
 
 - CRUD Operations
     - Insert Book - allows users to add a book, by filling in add book form.
@@ -89,7 +92,7 @@ Mock ups can be viewed for each page below:
 - [Flask](http://flask.pocoo.org/)
     - **Flask** is a microframework for Python.
 - [MongoDB](https://www.mongodb.com/)
-    - **MongoDB** is a NoSQL Database which uses documents to store data.
+    - **MongoDB** is a database which stores data in flexible, JSON-like documents 
 - [Bootstrap](http://getbootstrap.com/)
     - **Bootstrap** is used to give a responsive layout.
 - [JQuery](https://jquery.com)
@@ -132,5 +135,3 @@ You need to install the dependencies in requirements.txt
 Run the project
 
     - python3 run.py
-
-
