@@ -75,7 +75,8 @@ provides UX:
 
 ### Planned Features
 
-- Book Cover API
+- Book Cover API]
+    - to add some images which are in context to the books
 
 ## Technology Used
 
