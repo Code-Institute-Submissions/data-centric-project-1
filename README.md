@@ -18,28 +18,18 @@ for, they can filter and sort the results to help them. The user can leave a
 review so they can tell others what they think and if they like the book they can
 recommend it to other users.
 
-As a User I would want:
-- to be able to easily navigate website
-- to be informed about the website
-- to be able to search
-    
-As a User I would want:
-- to easily understand and read the form
-- to be clearly told where information goes
-- to be informed that the record was added successfully or why it wasn't successful
-
-As a User I would want:
-- to be clearly shown the search results
-- to be able to filter the results
-- to be able to sort the results
-- to be able to view results by page if many results returned
-- to be able to click on a result to view more about it
-- to be able to clear filters
-
-As a User I would want:
-- to be able to clearly view a record details
-- to be able to edit or delete a record
-- to be able to add to a user reading list
+As a User I would want to be:
+- able to easily navigate the website, to get what I want
+- informed about the website, to understand it better
+- able to easily understand and read the form, to easily fill it in
+- clearly told where information goes, to see it has worked as expected
+- informed that the record was added successfully or why it wasn't successful
+- able to search and clearly shown the search results, to find what I'm looking for
+- able to filter and sort the results, to refine my search
+- able to click on a result to view more about it, to find out more information
+- able to clear filters, to see more results
+- able to edit or delete a record, to change mistakes or removed unwanted objects
+- able to add to a user reading list, to make a collection that's personal
 
 Mock ups can be viewed for each page below:
 - [Index](/mock_ups/Index.jpg/)
@@ -85,7 +75,8 @@ provides UX:
 
 ### Planned Features
 
-- Book Cover API
+- Book Cover API]
+    - to add some images which are in context to the books
 
 ## Technology Used
 
