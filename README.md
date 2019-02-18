@@ -138,12 +138,16 @@ To run locally you need to clone the repository
 You need to install the dependencies in requirements.txt 
 
     - pip install -r requirements.txt
+    
+Use the Heroku branch
 
-You need to have a database from Mlab or similar which you will require the
-following environ variables set:
+    - git checkout heroku
 
-    - MONGO_URI
-    - MONGODB_NAME
+You need to have a database from Mlab or similar and you will need to set the
+following environment variables:
+
+    - export MONGO_URI=[Insert Database URI]
+    - export MONGODB_NAME=[Insert Database Name]
 
 Run the project
 
