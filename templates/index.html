@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
 <header>
     <h3 class="header-text">Welcome to Books You'll Love</h3> 
     <p class="header-text">Here you can share your favourite books with friends or a new book
@@ -22,9 +21,6 @@
         </form>
     </div>
 </section>
-
-
-
 <section class="row content">
     <article class="col-lg-9 featured-book-lg">
         <div class="row">
@@ -110,31 +106,21 @@
         <div id="row_chart" class="charts"></div>
     </article>
 </section>
-    
-    
-
 <script>
-
     var pie_chart = dc.pieChart("#pie_chart")
     var row_chart = dc.rowChart("#row_chart");
-    
-    
     var most_viewed = {{ most_viewed | tojson | safe }};
-    
     var ndx = crossfilter(most_viewed),
         title = ndx.dimension(function(d) {return d.title;}),
         viewsGroup = title.group().reduceSum(function(d) {return +d.views;}),
         genre = ndx.dimension(function(d) {return d.genre;}),
         genreByCount = genre.group()
-        
-        
     pie_chart
         .height(400)
         .radius(160)
         .dimension(genre)
         .group(genreByCount)
         .ordinalColors(['#3182bd', '#6baed6', '#9ecae1', '#c6dbef', '#dadaeb'])
-   
     row_chart
         .height(400)
         .margins({top: 5, right: 5, bottom: 5, left: 5})
@@ -144,14 +130,10 @@
         .elasticX(true)
         .dimension(title)
         .group(viewsGroup);
-        
-        
     row_chart.on('pretransition', function() {
         row_chart.select('g.axis').attr('transform', 'translate(0,0)');
         row_chart.selectAll('line.grid-line').attr('y2', row_chart.effectiveHeight());
     });
-    
     dc.renderAll();
-    
 </script>
 {% endblock %}
