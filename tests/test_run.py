@@ -4,13 +4,13 @@ import run
 
 
 class test_books(unittest.TestCase):
-    
-    # Test Suite
-    
+    """
+    Test Suite
+    """
     def test_find_book(self):
-        
-        # Find book record by ID
-        
+        """
+        Find book record by ID
+        """
         book = run.find_test_book("5b55febe207f2b4319b8c010")
         
         test_book = {
@@ -29,9 +29,9 @@ class test_books(unittest.TestCase):
         self.assertEqual(test_book, book)
         
     def test_update_book(self):
-        
-        # Update book record by ID
-        
+        """
+        Update book record by ID
+        """
         run.update_test_book("5b56efbe207f2b5a522cd07d")
         book = run.find_test_book("5b56efbe207f2b5a522cd07d")
         
@@ -52,27 +52,27 @@ class test_books(unittest.TestCase):
         self.assertEqual(test_book, book)
         
     def test_get_genres(self):
-        
-        # Test get genre list
-        
+        """
+        Test get genre list
+        """
         _genres = run.get_genres()
         test_genre = "History"
         
         self.assertIn(test_genre, _genres)
         
     def test_get_authors(self):
-        
-        # Test get author list 
-        
+        """
+        Test get author list 
+        """
         _authors = run.get_authors()
         test_author = "Robyn Young"
         
         self.assertIn(test_author, _authors)
         
     def test_insert_book(self):
-        
-        # Test that the book inserted correctly
-        
+        """
+        Test that the book inserted correctly
+        """
         run.insert_test_book()
         
         last_book = run.find_last_test()
@@ -92,9 +92,9 @@ class test_books(unittest.TestCase):
         self.assertEqual(test_book, last_book)
         
     def test_update_reviews(self):
-        
-        # Test for updating reviews and rating by ID
-        
+        """
+        Test for updating reviews and rating by ID
+        """
         run.update_test_reviews("5b55ff10207f2b4522d99830")
         book = run.find_test_book("5b55ff10207f2b4522d99830")
         
@@ -108,9 +108,9 @@ class test_books(unittest.TestCase):
         self.assertIn(test_review, book_reivew)
         
     def test_text_search(self):
-        
-        # Test to check text search returns correct results
-        
+        """
+        Test to check text search returns correct results
+        """
         books = run.text_search_test("Book 1")
         
         test_book = {
